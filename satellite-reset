@@ -76,6 +76,8 @@ cancelpulptasks(){
   sudo cat /etc/pki/katello/certs/pulp-client.crt /etc/pki/katello/private/pulp-client.key > ~/.pulp/user-cert.pem
   # Resort to grepping the password from /etc/pulp/admin.conf if cert and key file are not found.
   if [ "$?" -ne "0" ]; then
+    # Remove user-cert.pem to prevent pulp-admin from trying to automatically use it.
+    rm -f ~/.pulp/user-cert.pem
     PULP_PASS="$(grep '^default_pass' /etc/pulp/server.conf | cut -f2 -d' ')"
     PULPADMINARGS="-u admin -p $PULP_PASS"
   fi

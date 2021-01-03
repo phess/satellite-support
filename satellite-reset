@@ -77,7 +77,7 @@ cancelpulptasks(){
   # Resort to grepping the password from /etc/pulp/admin.conf if cert and key file are not found.
   if [ "$?" -ne "0" ]; then
     PULP_PASS="$(grep '^default_pass' /etc/pulp/server.conf | cut -f2 -d' ')"
-    PULPADMINARGS="-u admin -p '$PULP_PASS'"
+    PULPADMINARGS="-u admin -p $PULP_PASS"
   fi
 
   NUMTASKS=`mongo pulp_database --eval 'printjson(db.task_status.find({"state": {"$in": ["waiting", "running"]}}).toArray())' | grep task_id | awk '{print $NF}' | sed s#\"##g | sed s#,##g | wc -l`
